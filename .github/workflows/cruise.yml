@@ -2,11 +2,16 @@ name: Post cruise article to Reddit
 
 on:
   schedule:
-    - cron: "0 13 * * *"   # ~9am ET
-    - cron: "0 16 * * *"   # ~12pm ET
-    - cron: "0 19 * * *"   # ~3pm ET
-    - cron: "0 22 * * *"   # ~6pm ET
-    - cron: "0 1 * * *"    # ~9pm ET
+    - cron: "0 13 * * *"    # ~9:00am ET
+    - cron: "30 14 * * *"   # ~10:30am ET
+    - cron: "0 16 * * *"    # ~12:00pm ET
+    - cron: "30 17 * * *"   # ~1:30pm ET
+    - cron: "0 19 * * *"    # ~3:00pm ET
+    - cron: "30 20 * * *"   # ~4:30pm ET
+    - cron: "0 22 * * *"    # ~6:00pm ET
+    - cron: "30 23 * * *"   # ~7:30pm ET
+    - cron: "0 1 * * *"     # ~9:00pm ET
+    - cron: "30 2 * * *"    # ~10:30pm ET
   workflow_dispatch:
 
 permissions:
