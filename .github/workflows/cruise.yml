@@ -1,0 +1,53 @@
+name: Post cruise article to Reddit
+
+on:
+  schedule:
+    - cron: "0 13 * * *"   # ~9am ET
+    - cron: "0 16 * * *"   # ~12pm ET
+    - cron: "0 19 * * *"   # ~3pm ET
+    - cron: "0 22 * * *"   # ~6pm ET
+    - cron: "0 1 * * *"    # ~9pm ET
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cruise-reddit
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+      REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+      REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+      REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      REDDIT_SUBREDDIT: CruiseReview
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install praw requests
+      - name: Post one cruise article
+        run: python post_cruise.py
+      - name: Commit posted log
+        if: always()
+        run: |
+          git config user.name  "cruise-bot"
+          git config user.email "actions@github.com"
+          git add posted.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "cruise: mark topic posted [skip ci]"
+            for a in 1 2 3 4 5; do
+              git pull --rebase origin master && git push && { echo pushed; break; }
+              sleep 5
+            done
+          fi
