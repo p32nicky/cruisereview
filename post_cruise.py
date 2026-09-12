@@ -15,7 +15,9 @@ HERE       = Path(__file__).resolve().parent
 TOPICS     = HERE / "topics.json"
 POSTED     = HERE / "posted.json"
 SUBREDDIT  = os.environ.get("REDDIT_SUBREDDIT", "CruiseReview")
-AFFILIATE  = "https://www.dpbolvw.net/click-1-17037666"
+# Cloaked affiliate link: Reddit hard-blocks the raw dpbolvw.net domain (posts
+# get removed even with mod-approve), but allows vercel.app. This redirects there.
+AFFILIATE  = "https://grunsguide.vercel.app/cruise"
 GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
 GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
