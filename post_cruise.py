@@ -15,9 +15,11 @@ HERE       = Path(__file__).resolve().parent
 TOPICS     = HERE / "topics.json"
 POSTED     = HERE / "posted.json"
 SUBREDDIT  = os.environ.get("REDDIT_SUBREDDIT", "CruiseReview")
-# Cloaked affiliate link: Reddit hard-blocks the raw dpbolvw.net domain (posts
-# get removed even with mod-approve), but allows vercel.app. This redirects there.
-AFFILIATE  = "https://grunsguide.vercel.app/cruise"
+# Send readers to our own cruise site (Cruise Compass) instead of a raw
+# affiliate link: Reddit hard-blocks the dpbolvw.net domain (posts get removed
+# even with mod-approve), but allows vercel.app. The site carries the affiliate
+# links, so the commission still flows and the post reads as a helpful resource.
+AFFILIATE  = "https://cruisereviews.vercel.app/"
 GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
 GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
@@ -65,7 +67,7 @@ def write_post(category, topic):
     data = json.loads(m.group(0)) if m else {"title": topic, "body": raw}
     title = re.sub(r"\s+", " ", str(data.get("title", topic))).strip()[:300]
     body = str(data.get("body", "")).strip()
-    body += (f"\n\n---\n💡 *Hunting for a deal? I use this to compare cruise prices: {AFFILIATE}*")
+    body += (f"\n\n---\n💡 *More cruise guides, tips & deal comparisons: {AFFILIATE}*")
     return title, body
 
 
