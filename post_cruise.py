@@ -20,6 +20,9 @@ SUBREDDIT  = os.environ.get("REDDIT_SUBREDDIT", "CruiseReview")
 # even with mod-approve), but allows vercel.app. The site carries the affiliate
 # links, so the commission still flows and the post reads as a helpful resource.
 AFFILIATE  = "https://cruisereviews.vercel.app/"
+# Our own paid product (Gumroad). Reddit allows gumroad.com; posts self-approve.
+CHECKLIST  = os.environ.get("CHECKLIST_URL",
+    "https://p32nicky.gumroad.com/l/first-time-cruisers-checklist-pack")
 GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
 GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
@@ -68,6 +71,9 @@ def write_post(category, topic):
     title = re.sub(r"\s+", " ", str(data.get("title", topic))).strip()[:300]
     body = str(data.get("body", "")).strip()
     body += (f"\n\n---\n💡 *More cruise guides, tips & deal comparisons: {AFFILIATE}*")
+    body += (f"\n\n📋 *New to cruising? The [First-Time Cruiser's Checklist Pack]({CHECKLIST}) "
+             f"— 40+ printable checklists & worksheets (countdown timeline, packing list, budget "
+             f"tracker & more) so nothing gets forgotten.*")
     return title, body
 
 
